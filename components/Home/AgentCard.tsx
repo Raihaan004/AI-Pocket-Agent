@@ -1,11 +1,12 @@
-import { View, Text, Image } from 'react-native'
+import { View, Text, Image, TouchableOpacity } from 'react-native'
 import React from 'react'
 import Colors from '@/shared/Colors'
+import { useRouter } from 'expo-router'
 
 type Props={
     agent:Agent
 }
-type Agent={
+export type Agent={
     id:number,
     name:string,
     desc:string,
@@ -16,13 +17,16 @@ type Agent={
     featured?:boolean
 }
 export default function AgentCard({agent}:Props) {
+  
   return (
     <View style={{
         backgroundColor:Colors.WHITE,
         borderRadius:15,
         minHeight:200,
         overflow:'hidden',
-    }}><View style={{
+    }}>
+
+      <View style={{
         padding:15, 
 
     }}>

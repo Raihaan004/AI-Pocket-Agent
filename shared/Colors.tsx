@@ -2,5 +2,6 @@ export default {
     PRIMARY: '#3692ff',
     WHITE:'#fff',
     BLACK:'#000',
-    GRAY:'#555'
+    GRAY:'#555',
+    LIGHT_GRAY:'#ddd'
 }
