@@ -17,7 +17,7 @@ type Message = {
 
 export default function ChatUI() {
   const navigation = useNavigation();
-  const { agentName, initialText, agentPrompt, agentId, chatId } = useLocalSearchParams();
+  const { agentName, initialText, agentPrompt, agentId, chatId,messagesList } = useLocalSearchParams();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState<string>();
   const [file, setFile] = useState<string | null>();
@@ -25,12 +25,29 @@ export default function ChatUI() {
   const { user } = useUser();
 
   useEffect(() => {
-    navigation.setOptions({ headerShown: true, headerTitle: agentName, headerRight: () => (<Plus />) })
-    if (!chatId) {
-      const id = Date.now().toString();
-      setDocId(id);
+  navigation.setOptions({
+    headerShown: true,
+    headerTitle: agentName,
+    headerRight: () => <Plus />,
+  });
+
+  if (!chatId) {
+    const id = Date.now().toString();
+    setDocId(id);
+  }
+
+  if (messagesList) {
+    try {
+      const messageListJSON =
+        typeof messagesList === 'string' ? JSON.parse(messagesList) : messagesList;
+      if (Array.isArray(messageListJSON) && messageListJSON.length > 0) {
+        setMessages(messageListJSON);
+      }
+    } catch (error) {
+      console.warn('Failed to parse messagesList:', error);
     }
-  }, [])
+  }
+}, [messagesList]);
 
   useEffect(() => {
     //@ts-ignore
@@ -97,14 +114,14 @@ export default function ChatUI() {
   useEffect(() => {
     const SaveMessages = async () => {
       if (messages?.length > 0 && docId) {
-        await setDoc(doc(firestoreDb, 'chats', docId), {
-          userEmail: user?.primaryEmailAddress?.emailAddress,
-          messages: messages,
-          docId: docId,
-          agentName: agentName,
-          agentPrompt: agentPrompt,
-          agentId: agentId,
-        }, { merge: true })
+await setDoc(doc(firestoreDb, 'chats', docId), {
+  userEmail: user?.primaryEmailAddress?.emailAddress || "unknown",
+  messages: messages || [],
+  docId: docId || Date.now().toString(),
+  agentName: agentName || "Unknown Agent",
+  agentPrompt: agentPrompt || "",
+  agentId: agentId || null, // ✅ Fix here
+}, { merge: true });
       }
     }
     SaveMessages();
