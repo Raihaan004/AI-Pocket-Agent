@@ -25,15 +25,16 @@ export default function Index() {
   const router = useRouter();
   const { user } = useUser();
   const [loading, setLoading]=useState(true);
-  useEffect(() => {
-    if (isSignedIn) {
-      //redirect to Home Screen
-      router.replace("/(tabs)/Home");
-    }
-    if (isSignedIn!=undefined){
-      setLoading(false);
-    }
-  }, [isSignedIn])
+useEffect(() => {
+  if (isSignedIn === undefined) return; // still loading Clerk status
+
+  setLoading(false);
+
+  if (isSignedIn) {
+    router.replace("/(tabs)/Home");
+  }
+}, [isSignedIn]);
+
   useWarmUpBrowser()
 
   // Use the `useSSO()` hook to access the `startSSOFlow()` method
@@ -135,9 +136,8 @@ export default function Index() {
           fontWeight: 'bold',
         }}>Get Started</Text>
       </TouchableOpacity>}
-        {loading==undefined&&
-        <ActivityIndicator size={'large'}/>
-        }
+{loading && <ActivityIndicator size={'large'} />}
+
     </View>
   );
 }

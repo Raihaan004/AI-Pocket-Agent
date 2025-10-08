@@ -5,31 +5,36 @@ import AgentCard from './AgentCard'
 import NonFeaturedAgentCard from './NonFeaturedAgentCard'
 import { useRouter } from 'expo-router'
 
-export default function AgentListComponent({isFeatured}:any) {
+export default function AgentListComponent({data}:any) {
   const router = useRouter();
   return (
     <View>
       <FlatList
-      data={Agents}
-      numColumns={2}
-      // @ts-ignore
-      renderItem={({item,index})=>item.featured=isFeatured &&(
-        <TouchableOpacity style={{
-            flex:1,
-            padding:5,
-        }} onPress={() => router.push({
-            pathname: "/chat",
-            params: { 
-              agentName: item.name, 
-              initialText: item.initialText, 
-              agentPrompt: item.prompt,
-              agentId:item.id,
+        data={data}
+        numColumns={2}
+        renderItem={({ item, index }) => (
+          <TouchableOpacity
+            style={{ flex: 1, padding: 5 }}
+            onPress={() =>
+              router.push({
+                pathname: "/chat",
+                params: {
+                  agentName: item.name,
+                  initialText: item.initialText,
+                  agentPrompt: item.prompt,
+                  agentId: item.id,
+                },
+              })
             }
-          })}>
-          {item.featured?
-        <AgentCard agent={item} key={index}/>: <NonFeaturedAgentCard agent={item} key={index}/>}
-        </TouchableOpacity>
-      )}/>
+          >
+            {item.featured ? (
+              <AgentCard agent={item} key={index} />
+            ) : (
+              <NonFeaturedAgentCard agent={item} key={index} />
+            )}
+          </TouchableOpacity>
+        )}
+      />
     </View>
   )
 } 

@@ -5,9 +5,12 @@ import { useNavigation } from 'expo-router';
 import { Settings } from 'lucide-react-native';
 import React, { useEffect } from 'react';
 import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
+import { Agents } from '@/shared/AgentList';
 
 export default function Home() {
   const navigation = useNavigation();
+  const featuredAgents = Agents.filter(a => a.featured);
+  const nonFeaturedAgents = Agents.filter(a => !a.featured);
   useEffect(()=>{
     navigation.setOptions({
       headerTitle:()=>(
@@ -48,9 +51,9 @@ export default function Home() {
   return (
     <FlatList data={[]} renderItem={null} ListHeaderComponent={
       <View style={{padding:15}}>
-      <AgentListComponent isFeatured={true}/>
-      <CreateAgentBanner/>
-      <AgentListComponent isFeatured={false}/>
+          <AgentListComponent data={featuredAgents}/>
+          <CreateAgentBanner/>
+          <AgentListComponent data={nonFeaturedAgents}/>
     </View>
     }/>
     

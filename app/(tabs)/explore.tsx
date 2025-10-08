@@ -1,12 +1,14 @@
-import { View, Text } from 'react-native'
+import { View, Text, ScrollView } from 'react-native'
 import React from 'react'
 import CreateAgentBanner from '@/components/Home/CreateAgentBanner'
 import AgentListComponent from '@/components/Home/AgentListComponent'
 import UserCreatedAgentList from '@/components/Explore/UserCreatedAgentList'
+import { Agents } from '@/shared/AgentList'
 
 export default function Explore() {
+   const nonFeaturedAgents = Agents.filter(agent => !agent.featured);
   return (
-    <View style={{
+    <ScrollView style={{
       padding: 20,
     }}>
       <CreateAgentBanner/>
@@ -16,7 +18,7 @@ export default function Explore() {
         fontSize: 18,
         fontWeight:'bold',
       }}>Featured Agent</Text>
-      <AgentListComponent isFeatured={true}/>
-    </View>
+      <AgentListComponent data={nonFeaturedAgents} />
+    </ScrollView>
   )
 }
